@@ -1,0 +1,845 @@
+Sprint11
+
+
+
+A.
+a, x, b, c = map(int, input().split())
+y = a*x*x + b*x + c
+print(y)
+
+B.
+def check(a, b, c):
+	if all((a%2, b%2, c%2)):
+		return True
+	if not any((a%2, b%2, c%2)):
+		return True
+	return False
+
+def print_result(result):
+	if result:
+		print('WIN')
+	else:
+		print('FAIL')
+
+a, b, c = map(int, input().strip().split())
+print_result(check(a, b, c))
+
+C.
+from typing import List, Tuple
+
+def get_neighbours(matrix: List[List[int]], row: int, col: int, n: int, m: int) -> List[int]:
+    neighbours = []
+    for i in range(row-1, row+2, 2):
+        if i < 0 or i > n-1:
+            continue
+        else:
+            neighbours.append(matrix[i][col])
+    for i in range(col-1, col+2, 2):
+        if i < 0 or i > m-1:
+            continue
+        else:
+            neighbours.append(matrix[row][i])
+    return sorted(neighbours)
+
+def read_input() -> Tuple[List[List[int]], int, int]:
+    n = int(input())
+    m = int(input())
+    matrix = []
+    for i in range(n):
+        matrix.append(list(map(int, input().strip().split())))
+    row = int(input())
+    col = int(input())
+    return matrix, row, col, n, m
+
+matrix, row, col, n, m = read_input()
+print(" ".join(map(str, get_neighbours(matrix, row, col, n, m))))
+
+D.
+n = int(input())
+values = list(map(int, input().split()))
+counter_ans = 0
+
+if len(values) == 1:
+    print(1)
+else:
+    prev_check = True
+    for i in range(n-1):        
+        post_check = values[i] > values[i+1]
+        if all((prev_check, post_check)):
+            counter_ans += 1
+        prev_check = not (post_check or values[i] == values[i+1])
+    if prev_check:
+        counter_ans += 1
+    print(counter_ans)
+
+E.
+def get_longest_word(n:int, line: str) -> str:
+    size = n - line.count(' ')
+    words = line.split()
+    longest = ''
+    len_longest = 0
+    for i in words:
+        if size < len_longest:
+            return longest, str(len_longest)
+        if len(i) > len_longest:
+            longest = i
+            len_longest = len(i)
+        size -= len(i)
+    return longest, str(len_longest)
+
+def read_input() -> tuple:
+    n = int(input())
+    line = input().strip()
+    return n, line
+
+def print_result(result: tuple) -> None:
+    print('\n'.join(result))
+
+n, line = read_input()
+print_result(get_longest_word(n, line))
+
+F.
+import string
+
+def is_palindrome(line: str) -> bool:
+    line = line.lower().translate(str.maketrans('', '', string.punctuation)).replace(' ', '')
+    if line == line[::-1]:
+        return True
+    return False
+
+print(is_palindrome(input().strip()))
+
+G.
+def convert(number: int):
+	result = []
+	if number == 0:
+		return 0
+	else:
+		while number != 1:
+			result.insert(0, number%2)
+			number = number//2
+		result.insert(0, number%2)
+		return ''.join(map(str, result))
+
+def read_input() -> int:
+	return int(input().strip())
+
+print(convert(read_input()))
+
+H.
+first_number = [*map(int, input().strip())]
+second_number = [*map(int, input().strip())]
+
+first_number = first_number[::-1]
+second_number = second_number[::-1]
+
+size = max(len(first_number), len(second_number))
+
+first_number += [0] * (size - len(first_number))
+second_number += [0] * (size - len(second_number))
+
+add = 0
+answer = []
+
+for obj in zip(first_number, second_number):
+    current_sum = sum(obj, add)
+    add = current_sum // 2
+    answer.append(current_sum % 2)
+
+if add == 1:
+    answer.append(1)
+
+print("".join(map(str, answer[::-1])))
+
+I.
+etalon = [4**i for i in range(7)]
+
+def check(number: int) -> bool:
+	if number in etalon:
+		return True
+	return False
+
+print(check(int(input())))
+
+J.
+from typing import List
+
+
+def factorize(n: int) -> List[int]:
+    result = []
+
+    for i in range(2, int(n**0.5)+1):
+        while not n % i:
+            result.append(i)
+            n = n // i
+            if n == 1:
+                break
+
+    if n > 1:
+        result.append(n)
+    return result
+
+result = factorize(int(input()))
+print(' '.join(map(str, result)))
+
+K.
+from typing import Tuple
+
+
+def read_input() -> Tuple[int, int]:
+    n = int(input())
+    number = int(input().replace(' ', ''))
+    k = int(input())
+    return number, k
+
+number, k = read_input()
+print(*list(str(k+number)))
+
+L.
+from typing import Tuple
+
+def get_excessive_letter(shorter: str, longer: str) -> str:
+    shorter = list(shorter)
+    longer = list(longer)
+    for i in shorter:
+        longer.remove(i)
+    return longer[0]
+
+def read_input() -> Tuple[str, str]:
+    shorter = input().strip()
+    longer = input().strip()
+    return shorter, longer
+
+shorter, longer = read_input()
+print(get_excessive_letter(shorter, longer))
+
+Final_A.
+# 84350147
+from typing import List, Tuple
+
+
+def read(matrix: int) -> Tuple[int, List[int]]:
+    k = int(input())
+ 	  values = []
+    for r in range(matrix):
+        values.extend(list(input()))
+    return k, values
+
+
+def tap(values: Tuple[int, List[str]], k: int):
+    point = {'.'}
+    values_plus = {}
+    for i in values:
+        if i in point:
+            continue
+        values_plus[i] = values_plus.get(i, 0) + 1
+        if values_plus[i] > k:
+            point.add(i)
+    return len(values_plus) - len(point) + 1
+ 
+ 
+ if __name__ == '__main__':
+    size_matrix = 4
+    k, values = read(size_matrix)
+    print(tap(values, k*2))
+
+Final_B.
+# 84349495
+from typing import List, Tuple
+def read() -> Tuple[int, List[str]]:
+    area = int(input())
+    areas = input().split()
+    return to_area, areas
+
+
+def distance(arr: List[str], to_area: int) -> List[int]:
+    zero = to_area
+    result = []
+    for i in range(to_area):
+        if arr[i] == '0':
+            result.append(0)
+            zero = 1
+        else:
+            result.append(zero)
+            zero += 1
+
+    zero = to_area
+    miss = 0 
+
+    for i in range(to_area-1, -1, -1):
+        if miss:
+            miss -= 1
+            continue
+        if result[i] == 0:
+            zero = 1
+        else:
+            if zero == result[i]:
+                miss = zero - 1
+                continue
+            result[i] = min(zero, result[i])
+            zero += 1 
+
+    return result
+
+
+if __name__ == '__main__':
+    to_area, areas = read()
+    result = distance(areas, to_area)
+    print(*result)
+
+
+
+
+Sprint 12
+
+A.
+def transporate(a):
+    if not a: return []
+    rows_count = len(a)
+    colums_count = len(a[0])
+    new_matrix = []
+    for j in range(colums_count):
+        lil_m = []
+        for i in range(rows_count):
+            lil_m.append(a[i][j])
+        new_matrix.append(lil_m)
+    return new_matrix
+
+
+if __name__ == '__main__':
+    rows = int(input().strip())
+    colums = int(input().strip())
+    if rows != 0 and colums != 0:
+        a = [[0] * colums for _ in range(rows)]
+        for i in range(rows):
+            a[i] = [int(j) for j in input().strip().split(' ')]
+    elif rows == 0 and colums != 0:
+        a = [[0] for _ in range(colums)]
+    elif rows!= 0 and colums == 0:
+        a = [[0] for _ in range(rows)]
+    else:
+        a = []
+    for row in transporate(a):
+        print(*row)
+
+B. (в виде файла)
+# ! change LOCAL to False before submitting !
+# set LOCAL to True for local testing
+
+LOCAL = False
+
+if LOCAL:
+    class Node:
+        def __init__(self, value, next_item=None):
+            self.value = value
+            self.next_item = next_item
+
+
+def solution(node):
+    while node:
+        print(node.value, end='\n')
+        node = node.next_item
+    return node
+
+
+def test():
+    node3 = Node("node3", None)
+    node2 = Node("node2", node3)
+    node1 = Node("node1", node2)
+    node0 = Node("node0", node1)
+    solution(node0)
+    # Output is:
+    # node0
+    # node1
+    # node2
+    # node3
+
+
+if __name__ == '__main__':
+    test()
+
+C.
+-
+
+D.
+-
+
+E.
+-
+
+F.
+class Stack:
+    def __init__(self):
+        self.items = []
+
+    def size(self):
+        return len(self.items)
+
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        if self.size():
+            self.items.pop()
+        else:
+            print('error')
+
+    def get_max(self):
+        if self.size():
+            print(max(self.items))
+        else:
+            print('None')
+
+x = int(input())
+stack = Stack()
+
+for i in range(x):
+    text = input().split()
+    if text[0] == 'get_max':
+        stack.get_max()
+    elif text[0] == 'pop':
+        stack.pop()
+    elif text[0] == 'push':
+        stack.push(int(text[1]))
+
+G.
+class Stack:
+    def __init__(self):
+        self.items = []
+        self.items_max = []
+
+    def size(self):
+        return len(self.items)
+
+    def push(self, item):
+        if self.size():
+            self.items.append(item)
+            if item >= self.items_max[-1]:
+                self.items_max.append(item)
+        else:
+            self.items.append(item)
+            self.items_max.append(item)
+
+    def pop(self):
+        if self.size():
+            dele = self.items.pop()
+            if self.items_max[-1] == dele:
+                self.items_max.pop()
+        else:
+            print('error')
+
+    def get_max(self):
+        if self.size():
+            print(self.items_max[-1])
+        else:
+            print('None')
+
+x = int(input())
+stack = Stack()
+
+for i in range(x):
+    text = input().split()
+    if text[0] == 'get_max':
+        stack.get_max()
+    elif text[0] == 'pop':
+        stack.pop()
+    elif text[0] == 'push':
+        stack.push(int(text[1]))
+
+H.
+def is_correct_bracket_seq(a):
+    if not len(a):
+        return True
+    if len(a) % 2:
+        return False
+    etalon = {
+        ')': '(',
+        ']': '[',
+        '}': '{',
+    }
+    stack = []
+    for b in a:
+        if b in etalon.values():
+            stack.append(b)
+            continue
+        if len(stack) and etalon[b] == stack[-1]:
+            stack.pop()
+            continue
+        return False
+    if not len(stack):
+        return True
+    return False
+
+a = input()
+print(is_correct_bracket_seq(a))
+
+I.
+class MyQueueSized:
+    def __init__(self, max_size):
+        self.max_size = max_size
+        self.queue = []
+
+    def push(self, x):
+        if len(self.queue) < self.max_size:
+            self.queue.append(x)
+        else:
+            print('error')
+
+    def pop(self):
+        if self.queue:
+            print(self.queue.pop(0))
+        else:
+            print('None')
+
+    def peek(self):
+        if self.queue:
+            print(self.queue[0])
+        else:
+            print('None')
+
+    def size(self):
+        print(len(self.queue))
+
+n = int(input())
+max_size = int(input())
+queue = MyQueueSized(max_size)
+
+for i in range(n):
+    command = input().split()
+    if command[0] == 'push':
+        x = int(command[1])
+        queue.push(x)
+    elif command[0] == 'pop':
+        queue.pop()
+    elif command[0] == 'peek':
+        queue.peek()
+    elif command[0] == 'size':
+        queue.size()
+
+J.
+-
+
+K.
+-
+
+L.
+-
+
+Final_A.
+#85198425
+class Full(Exception):
+    pass
+
+
+class Empty(Exception):
+    pass
+
+
+class Deq:
+    def __init__(self, max_n):
+        self.queue = [None] * max_n
+        self.__max_n = max_n
+        self.head = 0
+        self.tail = 1
+        self.size = 0
+
+    def empty(self):
+        if self.size == 0:
+            raise Empty('error')
+
+    def full(self):
+        if self.size == self.__max_n:
+            raise Full('error')
+
+    def __get_prev_index(self, index):
+        return (index - 1) % self.__max_n
+
+    def __get_next_index(self, index):
+        return (index + 1) % self.__max_n
+
+    def push_front(self, value):
+        self.full()
+        self.queue[self.head] = value
+        self.head = self.__get_prev_index(self.head)
+        self.size += 1
+
+    def push_back(self, value):
+        self.full()
+        self.queue[self.tail] = value
+        self.tail = self.__get_next_index(self.tail)
+        self.size += 1
+
+    def pop_back(self):
+        self.empty()
+        self.tail = self.__get_prev_index(self.tail)
+        out = self.queue[self.tail]
+        self.queue[self.tail] = None
+        self.size -= 1
+        return out
+
+    def pop_front(self):
+        self.empty()
+        self.head = self.__get_next_index(self.head)
+        out = self.queue[self.head]
+        self.queue[self.head] = None
+        self.size -= 1
+        return out
+
+
+def start(deq):
+    command, *arg = input().split()
+    try:
+        return getattr(deq, command)(*arg)
+    except Exception as error:
+        return error
+
+Final_B.
+#85160247
+import operator
+
+
+class Stack:
+    def __init__(self):
+        self.items = []
+
+    def push(self, item: int) -> None:
+        self.items.append(item)
+
+    def pop(self) -> int:
+        return self.items.pop()
+
+
+if __name__ == '__main__':
+    operators = {
+        '+': lambda x, y: x + y,
+        '-': lambda x, y: x - y,
+        '*': lambda x, y: x * y,
+        '/': lambda x, y: x // y,
+    }
+    read = input().split()
+    stack = Stack()
+
+    for i in read:
+        if i in operators:
+            num2 = stack.pop()
+            num1 = stack.pop()
+            stack.push(operators[i](num1, num2))
+        else:
+            stack.push(int(i))
+
+    print(stack.pop())
+
+
+
+
+Sprint 13.
+
+A.
+def gb(n, etalon, pref, open, close):
+    if n == 0:
+        print(pref)
+    else:
+        if pref == '':
+            gb(n-1, etalon, pref+'(', open+1, close)
+        else:
+            if open == etalon:
+                gb(n-1, etalon, pref+')', open, close+1)
+            elif open == close:
+                gb(n-1, etalon, pref+'(', open+1, close)
+            else:
+                gb(n-1, etalon, pref+'(', open+1, close)
+                gb(n-1, etalon, pref+')', open, close+1)
+
+n = int(input())
+pref = ''
+open = 0
+close = 0
+
+gb(n*2, n, pref, open, close)
+
+B.
+keys = {
+    '2':'abc',
+    '3':'def',
+    '4':'ghi',
+    '5':'jkl',
+    '6':'mno',
+    '7':'pqrs',
+    '8':'tuv',
+    '9':'wxyz',
+}
+
+keys_inp = input()
+len_kinp = len(keys_inp)
+pref = ''
+
+def combinate(keys_inp,len_kinp, pref):
+    if len_kinp == 0:
+        print(pref, end = ' ')
+    else:
+        for i in keys[keys_inp[0]]:
+            combinate(keys_inp[1:], len_kinp-1, pref+i)
+
+combinate(keys_inp, len_kinp, pref)
+
+C.
+-
+
+D.
+-
+
+E.
+-
+
+F.
+-
+
+G.
+n = int(input())
+col = input().split()
+
+z = []
+o = []
+t = []
+
+for i in col:
+    if i == '0':
+        z.append(i)
+    elif i == '1':
+        o.append(i)
+    else:
+        t.append(i)
+
+print(*z, *o, *t)
+
+H.
+def element_compare(first, second):
+    max_len = max(len(first), len(second))
+    first_new = first + first[0]*(max_len - len(first))
+    second_new = second + second[0]*(max_len - len(second))
+    for i, j in zip(list(first_new), list(second_new)):
+        if i != j:
+            return int(i) < int(j)
+    if int(first[-1]) < int(second[-1]):
+        return True
+    return False
+
+
+def bubble(array, array_len):
+    for j in range(array_len-1):
+        for i in range(array_len-1-j):
+            if element_compare(array[i], array[i+1]):
+                array[i], array[i+1] = array[i+1], array[i]
+    print(''.join(array))
+
+
+array_len = int(input())
+array = input().split()
+
+bubble(array, array_len)
+
+I.
+-
+
+J.
+length = int(input())
+nums = list(map(int, input().split()))
+
+def bub(nums, length):
+    sorted = False
+    for j in range(length-1):
+        F = 0
+        for i in range(length-1-j):
+            if nums[i] > nums[i+1]:
+                nums[i], nums[i+1] = nums[i+1], nums[i]
+                F = 1
+                if not sorted:
+                    sorted = True
+        if F == 1:
+            print(*nums)
+    if not sorted:
+        print(*nums)
+
+bub(nums, length)
+
+K.
+-
+
+L.
+days = int(input())
+save = list(map(int, input().split()))
+bike = int(input())
+
+def BinSearch(arr, x, left, right):
+    if right - left <= 1:
+        if right >= len(arr):
+            right = len(arr) - 1
+        if left >= len(arr):
+            left = len(arr) - 1
+        if arr[left] < x and arr[right] < x:
+            return -1
+        elif arr[left] >= x:
+            return left + 1
+        else:
+            return right + 1
+    mid = (left + right) // 2
+    if x <= arr[mid]:
+        return BinSearch(arr, x, left, mid)
+    else:
+        return BinSearch(arr, x, mid + 1, right)
+
+idx1 = BinSearch(save, bike, left = 0, right = days-1)
+idx2 = BinSearch(save, bike*2, left = 0, right = days)
+
+print(idx1, idx2)
+
+M.
+-
+
+N.
+count_workers = int(input())
+workers = []
+
+for i in range(count_workers):
+    worker = list(map(int, input().split()))
+    workers.append(worker)
+
+workers.sort()
+
+begin = workers[0][0]
+end = workers[0][1]
+start = current_index = 1
+
+while current_index <= count_workers-1:
+    if workers[current_index][0] <= end:
+        end = max(end, workers[current_index][1])
+        current_index += 1
+    else:
+        print(begin, end)
+        begin = workers[current_index][0]
+        end = workers[current_index][1]
+        current_index += 1
+print(begin, end)
+
+O.
+-
+
+P.
+-
+
+Final_A.
+-
+
+Final_B.
+-
+
+
+if __name__ == '__main__':
+    count_com = int(input())
+    __max_size = int(input())
+    deq = Deq(__max_size)
+
+    for i in range(count_com):
+        result = start(deq)
+        if result:
+            print(result)
